@@ -78,7 +78,7 @@ loop:
 		adr		x0, str3
 		bl		printf
 
-		// call and print again and the value of sum will be double -> intentional error
+		// call again without resetting the sum to 0
 		// sum of buffer
 		mov		x0, x20
 		bl		checksum
