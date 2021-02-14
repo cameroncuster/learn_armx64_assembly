@@ -42,8 +42,7 @@ main:
 		stp		x21, x22, [sp, #-16]!
 		stp		x23, x24, [sp, #-16]!
 
-		// load values i and address of buffer
-		ldr		x19, i
+		// load address of buffer
 		adr		x20, buffer
 		ldr		x21, [x20]
 
@@ -76,7 +75,7 @@ loop:
 		adr		x0, str3
 		bl		printf
 
-		// call and print again and the value of sum will be double -> intentional error
+		// print again without resetting the sum to 0 for intentional bug
 		// sum of buffer
 		mov		x0, x20
 		bl		checksum
