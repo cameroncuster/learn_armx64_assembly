@@ -20,8 +20,7 @@ str3:	.asciz "\nThe checksum is %08X\n"
 		.type	checkSum, %function
 checksum:
 		// values
-		adr		x4, sum // sum address to store too
-		ldr		w3, [x4] // sum
+		mov		w3, #0 // sum
 loopsum:
 		// sum += buffer[i++]
 		ldrb	w2, [x0] // set buffer[i]
@@ -30,7 +29,6 @@ loopsum:
 		cmp		w2, #0 // buffer[i] == 0
 		bne		loopsum // loop
 
-		str		w3, [x4] // store the sum
 		mov		w0, w3 // ret val
 		ret
 		.size	checksum, (. - checksum)
@@ -78,7 +76,7 @@ loop:
 		adr		x0, str3
 		bl		printf
 
-		// call again without resetting the sum to 0
+		// call and print again and the value of sum will be double -> intentional error
 		// sum of buffer
 		mov		x0, x20
 		bl		checksum

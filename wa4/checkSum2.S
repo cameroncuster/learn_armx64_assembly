@@ -1,11 +1,3 @@
-		.data
-buffer:	.byte	0
-		.skip	4096
-		.align	2 // required on the pi
-i:		.word	0
-		.align	2
-sum:	.word	0
-
 		.section .rodata
 str1:	.asciz  "Enter text (ctrl-D to end): "
 		.align 2
@@ -20,7 +12,7 @@ str3:	.asciz "\nThe checksum is %08X\n"
 		.type	checkSum, %function
 checksum:
 		// values
-		mov		w3, #0 // sum
+		mov		w3, #0
 loopsum:
 		// sum += buffer[i++]
 		ldrb	w2, [x0] // set buffer[i]
@@ -29,6 +21,7 @@ loopsum:
 		cmp		w2, #0 // buffer[i] == 0
 		bne		loopsum // loop
 
+		str		w3, [x4] // store the sum
 		mov		w0, w3 // ret val
 		ret
 		.size	checksum, (. - checksum)
@@ -42,10 +35,9 @@ main:
 		stp		x21, x22, [sp, #-16]!
 		stp		x23, x24, [sp, #-16]!
 
-		// load values i and address of buffer
-		ldr		x19, i
-		adr		x20, buffer
-		ldr		x21, [x20]
+		// buffer on the stack
+		sub		sp, sp, #4096
+		mov		x20, sp
 
 		// print instructions
 		adr		x0, str1
@@ -76,7 +68,7 @@ loop:
 		adr		x0, str3
 		bl		printf
 
-		// call and print again and the value of sum will be double -> intentional error
+		// call again without resetting the sum to 0
 		// sum of buffer
 		mov		x0, x20
 		bl		checksum
@@ -86,8 +78,9 @@ loop:
 		adr		x0, str3
 		bl		printf
 		
-		// return 0 and restore the non-volatile registers
+		// return 0 and restore the stack and non-volatile registers
 		mov		w0, #0
+		add		sp, sp, #4096
 		ldp		x23, x24, [sp], #16
 		ldp		x21, x22, [sp], #16
 		ldp		x19, x20, [sp], #16
