@@ -6,6 +6,9 @@
    grayimage *color_to_gray(rgbimage *image);
 
 */
+
+// do I need to declare the struct for the image and the pixels?
+	// use the .equ as immediate values
 		.equ	i_red,	0
 		.equ	i_green,1
 		.equ	i_blue, 2
