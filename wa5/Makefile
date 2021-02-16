@@ -1,4 +1,3 @@
-
 C_OBJECTS = makegray.o  netpbm.o
 ASM_OBJECTS = colortogray.o
 

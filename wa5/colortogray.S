@@ -1,5 +1,3 @@
-
-
 /* color_to_gray will allocate a new grayimage structure and fill it
    with the grayscale equivalent of the given image.
 
@@ -16,5 +14,5 @@ color_to_gray:
 	   and store it in the grayimage. */
 
 		// move width and height into x0 and x1 and a pointer into allocate_gray
-		//bl allocate_gray
+		bl allocate_gray
 		// x0 contains address to grayscale image
