@@ -156,10 +156,11 @@ rgbimage *allocate_rgbimage(int width, int height)
   image->rows = (rgbpixel**) malloc(height * sizeof(rgbpixel*));
   if (image->rows == NULL)
     scream_and_die("allocate_rgbimage");
-  for (i = 0; i < height; i++)
+  for (i = 0; i < height; i++) {
     image->rows[i] = (rgbpixel*)malloc(width * sizeof(rgbpixel));
     if(image->rows[i] == NULL)
       scream_and_die("allocate_rgbimage");
+  }
   return image;
   }
 
