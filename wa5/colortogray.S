@@ -15,3 +15,6 @@ color_to_gray:
 	   each pixel from the given rgbimage from color to grayscale,
 	   and store it in the grayimage. */
 
+		// move width and height into x0 and x1 and a pointer into allocate_gray
+		//bl allocate_gray
+		// x0 contains address to grayscale image
