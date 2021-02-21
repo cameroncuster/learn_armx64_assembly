@@ -66,4 +66,6 @@ loopj:
 		cmp		w5, w2
 		blt		loopi
 
+
+		// x0 contains the gray image to return
 		ret
