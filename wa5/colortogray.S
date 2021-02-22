@@ -36,8 +36,8 @@ color_to_gray:
 
 		mov		w6, #0					// j = 0
 loopi:	mov		w5, #0					// i = 0
-		ldr		x7, x6, lsl w5			// load the gray pixel array
-		ldr		x8, x3, lsl w5			// load the rgb pixel array
+		ldr		x7, [x6, w5 lsl #i_size]			// load the gray pixel array
+		ldr		x8, [x3, w5 lsl #i_size]			// load the rgb pixel array
 loopj:
 		ldr		x9, x7, [w6, lsl #size]	// load the gray pixel
 		ldr		x10, x8, [w6, lsl #size]// load the rgb pixel
