@@ -39,8 +39,8 @@ loopi:	mov		x5, #0					// i = 0
 		ldr		x7, [x4, x5]			// load the gray pixel array
 		ldr		x8, [x3, x5]			// load the rgb pixel array
 loopj:
-		ldr		x9, x7, [x6 lsl #3]		// load the gray pixel
-		ldr		x10, x8, [x6 lsl #3]	// load the rgb pixel
+		ldr		x9, [x7, x6 lsl #3]		// load the gray pixel
+		ldr		x10, [x8, x6 lsl #3]	// load the rgb pixel
 
 		// load the rgb pixel values
 		ldr		x11, [x10, #i_red]
