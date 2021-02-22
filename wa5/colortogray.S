@@ -24,9 +24,9 @@ color_to_gray:
 	   each pixel from the given rgbimage from color to grayscale,
 	   and store it in the grayimage. */
 
-		mov		x3, [x0, #rows]			// get pointer to rgb rows
-		mov		w1, [x0, #width]		// get width
-		mov		w2, [x0, #height]		// get height
+		ldr		x3, [x0, #rows]			// get pointer to rgb rows
+		ldr		w1, [x0, #width]		// get width
+		ldr		w2, [x0, #height]		// get height
 		mov		w0, w1					// params for alloc_gray
 		mov		w1, w2
 		bl		allocate_grayimage
@@ -34,23 +34,26 @@ color_to_gray:
 
 		ldr		x4, x0					// get pointer to gray rows
 
-		mov		w6, #0					// j = 0
-loopi:	mov		w5, #0					// i = 0
-		ldr		x7, [x6, w5 lsl #i_size]			// load the gray pixel array
-		ldr		x8, [x3, w5 lsl #i_size]			// load the rgb pixel array
+		mov		x6, #0					// j = 0
+loopi:	mov		x5, #0					// i = 0
+		ldr		x7, [x4, x5]			// load the gray pixel array
+		ldr		x8, [x3, x5]			// load the rgb pixel array
 loopj:
-		ldr		x9, x7, [w6, lsl #size]	// load the gray pixel
-		ldr		x10, x8, [w6, lsl #size]// load the rgb pixel
+		ldr		x9, x7, [x6 lsl #3]		// load the gray pixel
+		ldr		x10, x8, [x6 lsl #3]	// load the rgb pixel
 
 		// load the rgb pixel values
-		mov		x11, [x10, #i_red]
-		mov		x12, [x10, #i_green]
-		mov		x13, [x10, #i_blue]
+		ldr		x11, [x10, #i_red]
+		ldr		x12, [x10, #i_green]
+		ldr		x13, [x10, #i_blue]
 
 		// calculate the gray pixel values based on the rgb pixel values
-		mul		x11, x11, #54			// 54r
-		madd	x12, x11, x12, #184		// 54r + 184g
-		madd	x13, x12, x13, #18		// 54r + 184g + 18b
+		mov		x14, #54
+		mul		x11, x11, x14			// 54r
+		mov		x14, #184
+		madd	x12, x11, x12, x14		// 54r + 184g
+		mov		x14, #18
+		madd	x13, x12, x13, x14		// 54r + 184g + 18b
 
 		lsr		x13, x13, #8			// divide the result by 256
 
