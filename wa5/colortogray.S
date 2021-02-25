@@ -6,17 +6,17 @@
    grayimage *color_to_gray(rgbimage *image);
 
 */
-// rgbpixel
+		// rgbpixel
 		.equ	i_red,	0
 		.equ	i_green,1
 		.equ	i_blue, 2
 		.equ	i_size,	3
 
-// image ( rgb and gray structs )
-		.equ	rows,	0 // pointer to array of pointers
-		.equ	width,	8 // number of columns ( length of each row )
-		.equ	height, 12 // number of rows ( length of array of pointers )
-		.equ	size,	20
+		// image ( rgb and gray structs )
+		.equ	rows,	0	// pointer to array of pointers
+		.equ	width,	8	// number of columns ( length of each row )
+		.equ	height, 12	// number of rows ( length of array of pointers )
+		.equ	size,	16
 
 	.global	color_to_gray
 color_to_gray:
@@ -24,27 +24,31 @@ color_to_gray:
 	   each pixel from the given rgbimage from color to grayscale,
 	   and store it in the grayimage. */
 
-		ldr		x3, [x0, #rows]			// get pointer to rgb rows
-		ldr		w1, [x0, #width]		// get width
-		ldr		w2, [x0, #height]		// get height
-		mov		w0, w1					// params for alloc_gray
-		mov		w1, w2
+		stp		x19, x30, [sp, #-16]!
+
+		mov		x19, x0					// pointer to rbgimage
+		ldr		w0, [x19, #width]		// get width
+		ldr		w1, [x19, #height]		// get height
 		bl		allocate_grayimage
 
-		mov		x4, x0					// get pointer to gray rows
+		mov		x4, x0					// get pointer to grayrows
+
+		ldr		x3, [x19, #rows]		// get rows
+		ldr		w1, [x19, #width]		// get width
+		ldr		w2, [x19, #height]		// get height
 
 		mov		x6, #0					// j = 0
 loopi:	mov		x5, #0					// i = 0
 		ldr		x7, [x4, x5]			// load the gray pixel array
 		ldr		x8, [x3, x5]			// load the rgb pixel array
 loopj:
-		ldr		x9, [x7, x6, lsl #3]		// load the gray pixel
-		ldr		x10, [x8, x6, lsl #3]	// load the rgb pixel
-
-		// load the rgb pixel values
-		ldr		x11, [x10, #i_red]
-		ldr		x12, [x10, #i_green]
-		ldr		x13, [x10, #i_blue]
+		mov		x15, #3
+		mul		x16, x6, x15
+		ldrb	w11, [x8, x16]			// load the rgb pixel red
+		add		x16, x16, #1
+		ldrb	w12, [x8, x16]			// load the rgb pixel green
+		add		x16, x16, #1
+		ldrb	w13, [x8, x16]			// load the rgb pixel blue
 
 		// calculate the gray pixel values based on the rgb pixel values
 		mov		x14, #54
@@ -54,9 +58,9 @@ loopj:
 		mov		x14, #18
 		madd	x13, x12, x13, x14		// 54r + 184g + 18b
 
-		lsr		x13, x13, #8			// divide the result by 256
+		lsr		w13, w13, #8			// divide the result by 256
 
-		mov		x9, x13					// gray pixel value
+		strb	w13, [x7, x5]			// store gray pixel value
 
 		// while j < width
 		add		w6, w6, #1
@@ -68,6 +72,6 @@ loopj:
 		cmp		w5, w2
 		blt		loopi
 
-
+		ldp		x19, x30, [sp], #16
 		// x0 contains the gray image to return
 		ret
