@@ -43,13 +43,9 @@ loopi:	mov		x6, #0					// j = 0
 		ldr		x7, [x4, x5, lsl #3]	// load the gray pixel array
 		ldr		x8, [x3, x5, lsl #3]	// load the rgb pixel array
 loopj:
-		mov		x15, #i_size
-		mul		x16, x6, x15			// effectively loads with #i_red
-		ldrb	w11, [x8, x16]			// load the rgb pixel red
-		add		x16, x16, #i_green
-		ldrb	w12, [x8, x16]			// load the rgb pixel green
-		add		x16, x16, #i_blue
-		ldrb	w13, [x8, x16]			// load the rgb pixel blue
+		ldrb	w11, [x8], #1			// load the rgb pixel red
+		ldrb	w12, [x8], #1			// load the rgb pixel green
+		ldrb	w13, [x8], #1			// load the rgb pixel blue
 
 		// calculate the gray pixel values based on the rgb pixel values
 		mov		x14, #54
