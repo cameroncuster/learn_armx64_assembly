@@ -55,13 +55,13 @@ loopj:
 		mov		x14, #54
 		mul		x11, x11, x14			// 54r
 		mov		x14, #184
-		madd	x12, x11, x12, x14		// 54r + 184g
+		madd	x11, x14, x12, x11		// 54r + 184g
 		mov		x14, #18
-		madd	x13, x12, x13, x14		// 54r + 184g + 18b
+		madd	x11, x14, x13, x11		// 54r + 184g + 18b
 
-		lsr		w13, w13, #8			// divide the result by 256
+		lsr		w11, w11, #8			// divide the result by 256
 
-		strb	w13, [x7, x6]			// store gray pixel value
+		strb	w11, [x7, x6]			// store gray pixel value
 
 		// while j < width
 		add		w6, w6, #1
