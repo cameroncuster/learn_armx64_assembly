@@ -58,6 +58,9 @@ rgbimage *read_color_image(char *filename)
     fprintf(stderr,"read_color_image: Too many bits per pixel.\n");
     exit(2);
     }
+
+  fgetc(infile); // function was reading a newline as the first byte of the image, skip it
+
   image = allocate_rgbimage(width, height);
   if(magic[1] == '6')
     { /* Binary format */

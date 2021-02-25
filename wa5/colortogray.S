@@ -31,23 +31,24 @@ color_to_gray:
 		ldr		w1, [x19, #height]		// get height
 		bl		allocate_grayimage
 
-		mov		x4, x0					// get pointer to grayrows
+		ldr		x4, [x0, #rows]			// load the gray rows
+										// width and height are set
 
 		ldr		x3, [x19, #rows]		// get rows
 		ldr		w1, [x19, #width]		// get width
 		ldr		w2, [x19, #height]		// get height
 
-		mov		x6, #0					// j = 0
-loopi:	mov		x5, #0					// i = 0
+		mov		x5, #0					// i = 0
+loopi:	mov		x6, #0					// j = 0
 		ldr		x7, [x4, x5]			// load the gray pixel array
 		ldr		x8, [x3, x5]			// load the rgb pixel array
 loopj:
-		mov		x15, #3
-		mul		x16, x6, x15
+		mov		x15, #i_size
+		mul		x16, x6, x15			// effectivley loads with #i_blue
 		ldrb	w11, [x8, x16]			// load the rgb pixel red
-		add		x16, x16, #1
+		add		x16, x16, #i_green
 		ldrb	w12, [x8, x16]			// load the rgb pixel green
-		add		x16, x16, #1
+		add		x16, x16, #i_blue
 		ldrb	w13, [x8, x16]			// load the rgb pixel blue
 
 		// calculate the gray pixel values based on the rgb pixel values
@@ -60,7 +61,7 @@ loopj:
 
 		lsr		w13, w13, #8			// divide the result by 256
 
-		strb	w13, [x7, x5]			// store gray pixel value
+		strb	w13, [x7, x6]			// store gray pixel value
 
 		// while j < width
 		add		w6, w6, #1
