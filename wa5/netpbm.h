@@ -46,4 +46,7 @@ grayimage *allocate_grayimage(int width, int height);
    structure to hold a color (rgb) image */
 rgbimage *allocate_rgbimage(int width, int height);
 
+/* free the 2d image arrays */
+void freeImage( rgbimage *image );
+
 #endif

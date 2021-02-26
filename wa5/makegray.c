@@ -31,7 +31,9 @@ int main(int argc, char *argv[])
   gray = color_to_gray(color);
   write_grayscale_image(argv[2], gray);
 
-  // free the memory?
+  // free the memory
+  freeImage( color );
+  freeImage( ( rgbimage *)gray );
 
   return 0;
   }
