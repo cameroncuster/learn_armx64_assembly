@@ -19,6 +19,7 @@ loop:
 		sub		x20, x20, #1
 		ldr		x0, [x19, x20, lsl #3]
 		bl		free
+		b		loop
 
 end:
 		mov		x0, x19
