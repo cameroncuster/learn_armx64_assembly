@@ -13,6 +13,7 @@ queue::~queue()
 
 }
 
+/*
 int queue::enque(int item)
 {
    if(isfull())
@@ -24,6 +25,7 @@ int queue::enque(int item)
    nitems++;
    return 1;
 }
+*/
 
 int queue::deque(int &item)
 {

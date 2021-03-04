@@ -1,6 +1,6 @@
 
 CPP_OBJS=main.o queue.o
-ASM_OBJS=
+ASM_OBJS=queue_asm.S
 
 ASM_SRC= $(patsubst %.o,%.S,$(ASM_OBJS))
 C_SRC= $(patsubst %.o,%.cc,$(CPP_OBJS))
