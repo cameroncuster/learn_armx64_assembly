@@ -25,7 +25,6 @@ int queue::enque(int item)
    nitems++;
    return 1;
 }
-*/
 
 int queue::deque(int &item)
 {
@@ -38,6 +37,7 @@ int queue::deque(int &item)
    nitems--;
    return item;
 }
+*/
 
 int queue::front(int &item)
 {
