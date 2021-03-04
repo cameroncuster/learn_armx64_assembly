@@ -1,9 +1,7 @@
-		.text
 		.equ	rows, 0
 		.equ	width, 8
 		.equ	height, 12
-		.type freeImage, %function					// freeImage( rgbimage *image )->void
-		.global freeImage
+		.global freeImage // freeImage( rgbimage *image )->void
 freeImage:
 		stp		x29, x30, [sp, #-32]!
 		stp		x19, x20, [sp, #16]

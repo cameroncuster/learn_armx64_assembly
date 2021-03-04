@@ -18,7 +18,7 @@
 		.equ	height, 12	// number of rows ( length of array of pointers )
 		.equ	size,	16
 
-	.global	color_to_gray
+	.global	color_to_gray // grayimage *color_to_gray(rgbimage *)
 color_to_gray:
 	/* Fill in the code to allocate a new grayimage, then convert
 	   each pixel from the given rgbimage from color to grayscale,
