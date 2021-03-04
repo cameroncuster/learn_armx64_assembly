@@ -4,6 +4,16 @@
 _ZN5queue5enqueEi:
 		stp		x29, x30, [sp, #-16]!
 
+		mov		x29, x0						// the integer to enque
+
+		bl		_ZN5queue6isfullEv			// if the queue is full return 0
+		cmp		x0, #0
+		bne		ret0
+
+ret1:	mov		x0, #1
+		ldp		x29, x30, [sp], #16
+		ret
+ret0:	mov		x0, #0
 		ldp		x29, x30, [sp], #16
 		ret
 		.size	_ZN5queue5enqueEi, (. - _ZN5queue5enqueEi)
