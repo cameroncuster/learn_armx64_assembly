@@ -1,9 +1,8 @@
-		//.text
+		// queue private member data
 		.equ	array,		0
 		.equ	frontindex,	8
 		.equ	endindex,	12
 		.equ	nitems,		16
-		//.type _ZN5queue5enqueEi, %function	// int enque(int)
 		.global _ZN5queue5enqueEi
 _ZN5queue5enqueEi:
 		stp		x29, x30, [sp, #-32]!
@@ -25,7 +24,6 @@ enque_exit:
 		ret
 		.size	_ZN5queue5enqueEi, (. - _ZN5queue5enqueEi)
 
-		//.type _ZN5queue5dequeERi, %function	// int deque(int &)
 		.global _ZN5queue5dequeERi
 _ZN5queue5dequeERi:
 		stp		x29, x30, [sp, #-32]!
