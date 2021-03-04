@@ -1,4 +1,8 @@
 		//.text
+		.equ	array,		0
+		.equ	frontindex,	8
+		.equ	endindex,	12
+		.equ	nitems,		16
 		//.type _ZN5queue5enqueEi, %function	// int enque(int)
 		.global _ZN5queue5enqueEi
 _ZN5queue5enqueEi:
