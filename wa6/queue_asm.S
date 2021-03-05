@@ -51,7 +51,7 @@ _ZN5queue5dequeERi:
 		str		x19, [sp, #16]
 
 		ldr		x19, [x0]			// the pointer to the current queue object
-		mov		x29, x1				// the integer on top of the queue
+		mov		x29, x1				// the address for the dequed item
 
 		bl		_ZN5queue7isemptyEv	// if the queue is empty return 0
 		cmp		x0, #0
