@@ -12,8 +12,7 @@ freeImage:
 		bl		free
 
 loop:
-		cmp		x20, #0
-		beq		end
+		cbz		x20, end
 		sub		x20, x20, #1
 		ldr		x0, [x19, x20, lsl #3]
 		bl		free
