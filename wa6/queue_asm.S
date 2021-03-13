@@ -16,8 +16,7 @@ _ZN5queue5enqueEi:
 		mov		x29, x1				// the integer to enque
 
 		bl		_ZN5queue6isfullEv	// if the queue is full return 0
-		cmp		x0, #0
-		bne		ret0en
+		cbnz	x0, ret0en
 
 		ldr		w0, [x19, #endindex]// the endindex
 
@@ -54,8 +53,7 @@ _ZN5queue5dequeERi:
 		mov		x29, x1				// the address for the dequed item
 
 		bl		_ZN5queue7isemptyEv	// if the queue is empty return 0
-		cmp		x0, #0
-		bne		ret0de
+		cbnz	x0, ret0en
 
 		ldr		w0, [x19, #frontindex]
 
