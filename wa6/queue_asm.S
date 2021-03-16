@@ -26,9 +26,8 @@ _ZN5queue5enqueEi:
 
 		add		w0, w0, #1			// endindex++
 		
-		mov		w1, #0
 		cmp		w0, #MAX_QUEUE_SIZE
-		csel	w0, w1, w0, ge		// if( endindex >= MAX_QUEUE_SIZE )
+		csel	w0, wzr, w0, ge		// if( endindex >= MAX_QUEUE_SIZE )
 		str		w0, [x19, #endindex]//	endindex = 0
 
 		ldr		w0, [x19, #nitems]
@@ -65,9 +64,8 @@ _ZN5queue5dequeERi:
 
 		add		w0, w0 ,#1			// frontindex++
 
-		mov		w2, #0
 		cmp		w0, #MAX_QUEUE_SIZE
-		csel	w0, w2, w0, ge		// if( frontindex >= MAX_QUEUE_SIZE )
+		csel	w0, wzr, w0, ge		// if( frontindex >= MAX_QUEUE_SIZE )
 		str		w0, [x19, #frontindex]//	frontindex = 0
 
 		ldr		w0, [x19, #nitems]
