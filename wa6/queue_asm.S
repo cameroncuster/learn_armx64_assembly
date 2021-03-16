@@ -22,7 +22,7 @@ _ZN5queue5enqueEi:
 
 		mov		w1, w0
 		lsl		w1, w1, 2
-		str		x29, [x19, x1]		// array[endindex] = item
+		str		w29, [x19, x1]		// array[endindex] = item
 
 		add		w0, w0, 1			// endindex++
 		
@@ -42,6 +42,8 @@ enque_exit:
 		ldp		x29, x30, [sp], 32
 		ret
 		.size	_ZN5queue5enqueEi, (. - _ZN5queue5enqueEi)
+
+
 
 		.global _ZN5queue5dequeERi
 _ZN5queue5dequeERi:
