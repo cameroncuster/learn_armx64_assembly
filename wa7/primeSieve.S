@@ -90,14 +90,22 @@ main:
         adr     x1, n
         bl      scanf
 
-        // test n is prime
-        ldr     w0, n
-        bl      isPrime
-
-        // print primality of n
-        mov     w1, w0
-        adr     x0, valout
+        adr     x0, write
         bl      printf
+
+        mov     w29, 0
+loop:
+        mov     w0, w29
+        bl      isPrime
+        cbz     w0, next
+        adr     x0, valout
+        mov     w1, w29
+        bl      printf
+next:
+        add     w29, w29 ,1
+        ldr     w0, n
+        cmp     w29, w0
+        ble     loop
 
         ldp     x29, x30, [sp], 16
         mov     x0, 0
