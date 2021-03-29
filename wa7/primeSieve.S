@@ -62,9 +62,8 @@ loop_n_times:                               // could be done in O( sqroot( n ) )
         bl      udiv64
         cbz     w0, ret_0                   // if( n % i == 0 ) return 0
         add     w20, w20, 1                 // i++
-        b       loop_n_times                // while( i < n )
-        cmp     w20, w19                    // if( i < n )
-        blt     loop_n_times
+        cmp     w20, w19
+        blt     loop_n_times                // while( i < n )
 
 ret_1:  mov     w0, 1
         b       exit_isPrime
