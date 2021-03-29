@@ -8,7 +8,7 @@ prompt: .asciz  "Enter a natural number: "
 valin:  .asciz  "%d"
         .align  2
 
-write:  .asciz  "The primes are: "
+write:  .asciz  "The primes are: \n"
         .align  2
 
 valout: .asciz  "%d\n"
@@ -78,8 +78,8 @@ exit_isPrime:
 
         .type   main, %function
         .globl  main
-main:
-        stp     x29, x30, [sp, -16]!
+main:   stp     x29, x30, [sp, -16]!
+        stp     x19, x20, [sp, -16]!
 
         // prompt for n
         adr     x0, prompt
@@ -90,23 +90,24 @@ main:
         adr     x1, n
         bl      scanf
 
+        // text
         adr     x0, write
         bl      printf
 
-        mov     w29, 0
-loop:
-        mov     w0, w29
+        // loop for all values to n and test prime
+        mov     w29, 1
+        ldr     w19, n
+loop:   mov     w0, w29
         bl      isPrime
         cbz     w0, next
         adr     x0, valout
         mov     w1, w29
         bl      printf
-next:
-        add     w29, w29 ,1
-        ldr     w0, n
-        cmp     w29, w0
+next:   add     w29, w29 ,1
+        cmp     w29, w19
         ble     loop
 
+        ldp     x19, x20, [sp], 16
         ldp     x29, x30, [sp], 16
         mov     x0, 0
         ret
