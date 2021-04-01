@@ -9,19 +9,19 @@ currQuar: .word 0
 read_count: .asciz  "Enter the number of pennies, nickels, dimes, and quarters for week "
         .align  2
 
-week:   .asciz  "%d: "
+week:   .asciz  "%d: " // combine with above printf
         .align  2
 
 collected: .asciz "Over four weeks you have collected %d pennies, %d nickels, %d dimes, and %d quarters \n"
         .align  2
 
-total:  .asciz  "This comes to $%d"
+total:  .asciz  "This comes to $%d \n"
         .align  2
 
-average: .asciz  "Your weekly average is $%d"
+average: .asciz  "Your weekly average is $%d.%d \n"
         .align  2
 
-savings:.asciz  "Your estimated yearly savings is $%d"
+savings:.asciz  "Your estimated yearly savings is $%d \n"
 
 valuesin:.asciz "%d %d %d %d"
 
@@ -101,9 +101,24 @@ read_weeks:
 
         add     w19, w19, w1                // w19 += total
 
+        // divide total by 100 for amount in USD
+        // calculate quotient in r1
+        ldr     x2, =0xA3D8
+        mul     x3, x19, x2
+        asr     x1, x3, 22
+        sub     x1, x1, x3, asr 63
+
+        // calculate remainder in r2
+        mov     x2, 100
+        mul     x2, x2, x1
+        sub     x2, x19, x2
+
+        adr     x0, average
+        bl      printf                      // print the total
+
         // calculate average
 
-        // calculate savins
+        // calculate savings
 
         ldp     x23, x24, [sp], 16
         ldp     x21, x22, [sp], 16
