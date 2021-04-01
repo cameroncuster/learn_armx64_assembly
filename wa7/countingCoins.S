@@ -34,11 +34,14 @@ savingsRemainderLessthan10:.asciz "Your estimated yearly savings is $%d.0%d \n"
         .align  2
 
 valuesin:.asciz "%d %d %d %d"
+        .align  2
 
 newline:.asciz  "\n"
 
         .text
 
+////////////////////////////////////////////////////////////////////////////////
+//  Uses x registers for ability to increase precision as necessary           //
 ////////////////////////////////////////////////////////////////////////////////
 
         .type   main, %function
@@ -118,22 +121,19 @@ read_weeks:
         add     w19, w19, w1                // w19 += total
 
         // divide total by 100 for amount in USD
-        // calculate quotient in r20
+        // calculate quotient in r1
         ldr     x2, =0xA3D8
         mul     x3, x19, x2
-        asr     x20, x3, 22
-        sub     x20, x20, x3, asr 63
+        asr     x1, x3, 22
+        sub     x1, x1, x3, asr 63
 
-        // calculate remainder in r21
-        mov     x21, 100
-        mul     x21, x21, x20
-        sub     x21, x19, x21
-
-        mov     x1, x20
-        mov     x2, x21
+        // calculate remainder in r2
+        mov     x2, 100
+        mul     x2, x2, x1
+        sub     x2, x19, x2
 
         // check for cents > 9
-        cmp     x21, 9
+        cmp     x2, 9
         bgt     totalRemainderGreaterthan9
 
         adr     x0, totalRemainderLessthan10
@@ -162,19 +162,47 @@ calculateAverage:
 
         // check for cents > 9
         cmp     x2, 9
-        bgt     remainderGreaterthan9
+        bgt     averageRemainderGreaterthan9
 
         adr     x0, averageRemainderLessthan10
         bl      printf                      // print the average
 
         b       calculateSavings
 
-remainderGreaterthan9:
+averageRemainderGreaterthan9:
         adr     x0, average
         bl      printf                      // print the average
 
 calculateSavings:
+        lsl     w0, w19, 3
+        add     w19, w0, w19, lsl 2
 
+        // divide total by 100 for amount in USD
+        // calculate quotient in r1
+        ldr     x2, =0xA3D8
+        mul     x3, x19, x2
+        asr     x1, x3, 22
+        sub     x1, x1, x3, asr 63
+
+        // calculate remainder in r2
+        mov     x2, 100
+        mul     x2, x2, x1
+        sub     x2, x19, x2
+
+        // check for cents > 9
+        cmp     x2, 9
+        bgt     savingsRemainderGreaterthan9
+
+        adr     x0, savingsRemainderLessthan10
+        bl      printf                      // print the savings
+
+        b       exit
+
+savingsRemainderGreaterthan9:
+        adr     x0, savings
+        bl      printf                      // print the savings
+
+exit:
         ldp     x23, x24, [sp], 16
         ldp     x21, x22, [sp], 16
         ldp     x19, x20, [sp], 16
