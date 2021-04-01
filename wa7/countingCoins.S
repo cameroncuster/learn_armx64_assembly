@@ -140,6 +140,8 @@ read_weeks:
         mul     x2, x2, x1
         sub     x2, x19, x2
 
+        lsr     x2, x2, 2                   // remainder /= 4 * to account for average
+
         // check for cents > 9
         cmp     x2, 9
         bgt     remainderGreaterthan9
@@ -147,7 +149,7 @@ read_weeks:
         adr     x0, averagelessthan10
         bl      printf                      // print the average
 
-        b       savings
+        b       calculateSavings
 
 remainderGreaterthan9:
         adr     x0, average
