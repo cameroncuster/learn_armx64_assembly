@@ -12,18 +12,23 @@ read_count: .asciz  "Enter the number of pennies, nickels, dimes, and quarters f
 week:   .asciz  "%d: " // combine with above printf
         .align  2
 
-collected: .asciz "Over four weeks you have collected %d pennies, %d nickels, %d dimes, and %d quarters \n"
+collected: .asciz "Over four weeks you have collected %d pennies, %d nickels, %d dimes, and %d quarters \n\n"
         .align  2
 
-total:  .asciz  "This comes to $%d \n"
+total:  .asciz  "This comes to $%d.%d \n"
         .align  2
 
-average: .asciz  "Your weekly average is $%d.%d \n"
+averagelessthan10:.asciz  "Your weekly average is $%d.0%d \n"
         .align  2
 
-savings:.asciz  "Your estimated yearly savings is $%d \n"
+average:.asciz  "Your weekly average is $%d.%d \n"
+        .align  2
+
+savings:.asciz  "Your estimated yearly savings is $%d.%d \n"
 
 valuesin:.asciz "%d %d %d %d"
+
+newline:.asciz  "\n"
 
         .text
 
@@ -79,6 +84,9 @@ read_weeks:
         sub     w19, w19, 1
         cbnz    w19, read_weeks
 
+        adr     x0, newline
+        bl      printf
+
         // output collected
         adr     x0, collected
         mov     w1, w21
@@ -88,6 +96,7 @@ read_weeks:
         bl      printf
 
         // calculate total
+
         // r19 = 0
         add     w0, w22, w22, lsl 2
         add     w19, w21, w0                // r19 = # of pennies + 5 * # of nickels
@@ -113,11 +122,38 @@ read_weeks:
         mul     x2, x2, x1
         sub     x2, x19, x2
 
-        adr     x0, average
+        adr     x0, total
         bl      printf                      // print the total
+
 
         // calculate average
 
+        // divide total by 400 for average amount in USD
+        // calculate quotient in r1
+        ldr     x2, =0x28F6
+        mul     x3, x19, x2
+        asr     x1, x3, 22
+        sub     x1, x1, x3, asr 63
+
+        // calculate remainder in r2
+        mov     x2, 400
+        mul     x2, x2, x1
+        sub     x2, x19, x2
+
+        // check for cents > 9
+        cmp     x2, 9
+        bgt     remainderGreaterthan9
+
+        adr     x0, averagelessthan10
+        bl      printf                      // print the average
+
+        b       savings
+
+remainderGreaterthan9:
+        adr     x0, average
+        bl      printf                      // print the average
+
+calculateSavings:
         // calculate savings
 
         ldp     x23, x24, [sp], 16
