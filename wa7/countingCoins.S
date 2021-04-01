@@ -88,6 +88,18 @@ read_weeks:
         bl      printf
 
         // calculate total
+        // r19 = 0
+        add     w0, w22, w22, lsl 2
+        add     w19, w21, w0                // r19 = # of pennies + 5 * # of nickels
+
+        lsl     w0, w23, 3
+        add     w0, w0, w23, lsl 1          // r0 += 10 * # number of dimes
+
+        add     w1, w24, w24, lsl 3
+        add     w1, w1, w24, lsl 4
+        add     w1, w0, w1                  // r1 = r0 + 25 * # of quarters
+
+        add     w19, w19, w1                // w19 += total
 
         // calculate average
 
