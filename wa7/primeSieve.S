@@ -51,9 +51,18 @@ endif2:
 isPrime:stp     x29, x30, [sp, -16]!
         stp     x19, x20, [sp, -16]!
 
-        mov     w19, w0                     // w19 = n
+        mov     w19, w0                     // r19 = n
+        mov     w29, w0                     // r29 = n
         cmp     w19, 3                      // if( n <= 3 )
         ble     ret_1                       //  return 1
+
+        clz     w0, w29
+        mov     w1, 31
+        sub     w29, w1, w0
+        lsr     w0, w29, 1
+        mov     w29, 2
+        lsl     w29, w29, w0                // 2 ^ ( floor( log2( n ) ) / 2 )
+        add     w29, w29, 1                 // + 1 for error checking
 
         mov     w20, 2                      // i = 2
 loop_n_times:                               // could be done in O( sqroot( n ) )
@@ -62,8 +71,8 @@ loop_n_times:                               // could be done in O( sqroot( n ) )
         bl      udiv64
         cbz     w0, ret_0                   // if( n % i == 0 ) return 0
         add     w20, w20, 1                 // i++
-        cmp     w20, w19
-        blt     loop_n_times                // while( i < n )
+        cmp     w20, w29
+        blt     loop_n_times                // while( i < ~sqrt( n ) )
 
 ret_1:  mov     w0, 1
         b       exit_isPrime
