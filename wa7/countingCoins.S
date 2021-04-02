@@ -1,9 +1,14 @@
-        .data // use .bss ( for uninitialized data ) with skips
-quarters: .word 0
-currPenn: .word 0
-currNick: .word 0
-currDime: .word 0
-currQuar: .word 0
+        .bss
+quarters: .word
+        .align  2
+currPenn: .word
+        .align  2
+currNick: .word
+        .align  2
+currDime: .word
+        .align  2
+currQuar: .word
+        .align  2
 
         .section .rodata
 read_count: .asciz  "Enter the number of pennies, nickels, dimes, and quarters for week "

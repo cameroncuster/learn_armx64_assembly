@@ -1,5 +1,6 @@
-        .data // use .bss ( for uninitialized data ) with skips
-n:      .word   0
+        .bss
+n:      .word
+        .align  2
 
         .section .rodata
 prompt: .asciz  "Enter a natural number: "
