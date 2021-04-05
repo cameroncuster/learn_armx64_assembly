@@ -7,13 +7,13 @@ C_SRC= $(patsubst %.o,%.cc,$(CPP_OBJS))
 
 
 # The following line allows you to add link-time flags
-LFLAGS=-Wall -g
+LFLAGS=-Wall -03 -g
 
 # The following line allows you to add compiler flags for C++ code
-CPPFLAGS=-Wall -g -I.
+CPPFLAGS=-Wall -03 -g -I.
 
 # The following line allows you to add compiler flags for assembly code
-ASMFLAGS=-Wall -g -I.
+ASMFLAGS=-Wall -03 -g -I.
 
 queuetest: ${CPP_OBJS} ${ASM_OBJS}
 	g++ ${LFLAGS} -o queuetest ${CPP_OBJS} ${ASM_OBJS}
