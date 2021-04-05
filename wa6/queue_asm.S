@@ -7,6 +7,8 @@
 		.equ	endindex,	frontindex + 4
 		.equ	nitems,		endindex + 4
 
+////////////////////////////////////////////////////////////////////////////////
+
 		.global _ZN5queue5enqueEi
 _ZN5queue5enqueEi:
 		stp		x29, x30, [sp, -32]!
@@ -43,7 +45,7 @@ enque_exit:
 		ret
 		.size	_ZN5queue5enqueEi, (. - _ZN5queue5enqueEi)
 
-
+////////////////////////////////////////////////////////////////////////////////
 
 		.global _ZN5queue5dequeERi
 _ZN5queue5dequeERi:
@@ -82,3 +84,5 @@ deque_exit:
 		ldp		x29, x30, [sp], 32
 		ret
 		.size	_ZN5queue5dequeERi, (. - _ZN5queue5dequeERi)
+
+////////////////////////////////////////////////////////////////////////////////
