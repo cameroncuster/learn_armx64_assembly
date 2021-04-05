@@ -5,11 +5,10 @@ makegray: $(C_OBJECTS) $(ASM_OBJECTS)
 	gcc -g -o makegray $(C_OBJECTS) $(ASM_OBJECTS)
 
 .c.o:
-	gcc -I. -g -c $<
+	gcc -Wall -I. -g -c $<
 
 .S.o:
-	gcc -I. -g -c $< 
+	gcc -Wall -I. -g -c $<
 
 clean:
 	rm -f *.o makegray *~ *.pgm
-
