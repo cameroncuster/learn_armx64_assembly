@@ -75,6 +75,16 @@ main:   stp     x29, x30, [sp, -16]!
         adr     x0, newline
         bl      printf
 
+        // calculate increment value = ( upper - lower ) / rows
+
+        // print x and f(x) for table header
+
+        //// loop table construction
+        // loop over all values from lower to upper incrementing by the increment
+        // value while outputting x and f(x) to fill the row at every iteration
+        //// end loop table construction
+
+        // exit & add BONUS features
 
         ldp     x19, x20, [sp], 16
         ldp     x29, x30, [sp], 16
