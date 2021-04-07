@@ -111,6 +111,24 @@ buildTable:
 
         // calculate f(x)
 
+        // numerator
+        mul     x1, x19, x19                // r1 = x^2
+        mul     x0, x19, x1                 // r0 = x^3
+        mov     x2, 2
+        mul     x2, x19, x2                 // r2 = 2x
+        sub     x0, x0, x1                  // r0 -= r1
+        sub     x0, x0, x2                  // r0 -= r2
+
+        // denominator
+        sub     x0, x19, 2                  // r0 = ( x - 2 )
+        mul     x0, x0, x0
+        mul     x0, x0, x0                  // r0 = ( x - 2 )^4
+        // divide r0 by 11
+        // add 3 to r0
+
+        // divide the numerator by the denominator
+        // exit
+
         // print f(x)
         adr     x0, quadval
         mov     x1, x19
