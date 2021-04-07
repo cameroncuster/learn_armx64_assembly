@@ -1,5 +1,5 @@
         .bss
-n:      .word
+n:      .word   0
         .align  2
 
         .section .rodata

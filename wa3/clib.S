@@ -1,8 +1,8 @@
 		.data
-n:		.word
-m:		.dword
-i:		.word
-j:		.dword
+n:		.word   0
+m:		.dword  0
+i:		.word   0
+j:		.dword  0
 
 		.section .rodata
 str1:	.asciz  "%d"

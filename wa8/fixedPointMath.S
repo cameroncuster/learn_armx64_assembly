@@ -1,4 +1,4 @@
-        .data                               // why do these have to be initialized to zero
+        .bss
 lower:  .quad   0
         .align  3
 upper:  .quad   0

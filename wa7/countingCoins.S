@@ -1,13 +1,13 @@
         .bss
-quarters: .word
+quarters: .word 0
         .align  2
-currPenn: .word
+currPenn: .word 0
         .align  2
-currNick: .word
+currNick: .word 0
         .align  2
-currDime: .word
+currDime: .word 0
         .align  2
-currQuar: .word
+currQuar: .word 0
         .align  2
 
         .section .rodata
