@@ -1,9 +1,9 @@
-        .bss
-lower:  .quad
+        .data                               // why do these have to be initialized to zero
+lower:  .quad   0
         .align  3
-upper:  .quad
+upper:  .quad   0
         .align  3
-rows:   .quad
+rows:   .quad   0
         .align  3
 
         .section .rodata
@@ -23,7 +23,7 @@ getRows:.asciz  "Rows: "
         .align  2
 
 tableHeader:
-        .asciz  "f(x)\tx\n"
+        .asciz  "x\tf(x)\n"
         .align  2
 
 quadval:
@@ -87,12 +87,9 @@ main:   stp     x29, x30, [sp, -16]!
         ldr     x19, lower                  // r19 = lower
         ldr     x20, upper                  // r20 = upper
         ldr     x29, rows
+        sub     x29, x29, 1
         sub     x0, x20, x19
         udiv    x29, x0, x29                // r29 contains increment value
-
-        adr     x0, quadval
-        mov     x1, x29
-        bl      printf
 
         // print x and f(x) for table header
         adr     x0, tableHeader
