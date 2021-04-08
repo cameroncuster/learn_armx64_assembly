@@ -8,7 +8,7 @@ rows:   .quad   0
 
         .section .rodata
 description:
-        .asciz  "\n This program will produce a table given a domain for x\n to evaluate the function f(x).\n\n f(x) = ( x^3 - x^2 -2x ) / ( ( ( x - 2 )^4 / 11 ) + 3 )\n\n"
+        .asciz  "\nThis program will produce a table given a domain for x\n to evaluate the function f(x).\n\n f(x) = ( x^3 - x^2 -2x ) / ( ( ( x - 2 )^4 / 11 ) + 3 )\n\n"
         .align  2
 
 getLowerLimit:
@@ -120,18 +120,23 @@ buildTable:
         sub     x0, x0, x2                  // r0 -= r2
 
         // denominator
-        sub     x0, x19, 2                  // r0 = ( x - 2 )
-        mul     x0, x0, x0
-        mul     x0, x0, x0                  // r0 = ( x - 2 )^4
-        // divide r0 by 11
-        // add 3 to r0
+        sub     x1, x19, 2                  // r1 = ( x - 2 )
+        mul     x1, x1, x1
+        mul     x1, x1, x1                  // r1 = ( x - 2 )^4
+        // divide r1 by 11
+        mov     x2, 11
+        sdiv    x1, x1, x2
+        // add 3 to r1
+        add     x1, x1, 3
 
         // divide the numerator by the denominator
-        // exit
+        sdiv    x1, x0, x1
 
         // print f(x)
         adr     x0, quadval
-        mov     x1, x19
+        bl      printf
+
+        adr     x0, newline
         bl      printf
 
         // table row formatting
