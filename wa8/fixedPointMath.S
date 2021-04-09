@@ -26,6 +26,9 @@ tableHeader:
         .asciz  "x\tf(x)\n"
         .align  2
 
+string: .asciz  "%s"
+        .align  2
+
 quadval:
         .asciz  "%ld"
         .align  2
@@ -53,7 +56,7 @@ main:   stp     x29, x30, [sp, -16]!
         adr     x0, getLowerLimit
         bl      printf
 
-        adr     x0, quadval
+        adr     x0, quadval                 // read a string but where is it stored
         adr     x1, lower
         bl      scanf
 
@@ -71,7 +74,7 @@ main:   stp     x29, x30, [sp, -16]!
         adr     x0, newline
         bl      printf
 
-        // get rows * update for non-integral values
+        // get rows
         adr     x0, getRows
         bl      printf
 
@@ -109,7 +112,7 @@ buildTable:
         adr     x0, tabchar
         bl      printf
 
-        // calculate f(x)
+        // calculate f(x) * update for non-integral values
 
         // numerator
         mul     x1, x19, x19                // r1 = x^2
