@@ -140,32 +140,45 @@ buildTable:
         adr     x0, tabchar
         bl      printf
 
-        // calculate f(x) * update for non-integral values
+        // calculate f(x) * keep everything in fixed format S( 47, 16 )
 
         // numerator
         mul     x1, x19, x19                // r1 = x^2
+        lsr     x1, x1, MAX_DECIMAL_DIGITS  // r1 = S( 47, 16 )
         mul     x0, x19, x1                 // r0 = x^3
+        lsr     x0, x0, MAX_DECIMAL_DIGITS  // r0 = S( 47, 16 )
         mov     x2, 2
-        mul     x2, x19, x2                 // r2 = 2x
+        lsl     x3, x3, 16                  // 2 in r3 = S( 47, 16 )
+        mul     x2, x19, x3                 // r2 = 2x
+        lsr     x2, x2, MAX_DECIMAL_DIGITS  // r2 = S( 47, 16 )
         sub     x0, x0, x1                  // r0 -= r1
         sub     x0, x0, x2                  // r0 -= r2
 
         // denominator
-        sub     x1, x19, 2                  // r1 = ( x - 2 )
+        sub     x1, x19, x3                 // r1 = ( x - 2 )
         mul     x1, x1, x1
+        lsr     x1, x1, MAX_DECIMAL_DIGITS  // r1 = S( 47, 16 )
         mul     x1, x1, x1                  // r1 = ( x - 2 )^4
+        lsr     x1, x1, MAX_DECIMAL_DIGITS  // r1 = S( 47, 16 )
+
         // divide r1 by 11
         mov     x2, 11
+        lsl     x2, x2, 16                  // 11 in r1 = S( 47, 16 )
         sdiv    x1, x1, x2
+        lsl     x1, x1, 16                  // r1 = S( 47, 16 )
         // add 3 to r1
-        add     x1, x1, 3
+        mov     x2, 3
+        lsl     x2, x2, 16
+        // use add     x1, x1, 3, lsl 16
+        add     x1, x1, x2
 
         // divide the numerator by the denominator
-        sdiv    x1, x0, x1
+        sdiv    x0, x0, x1
+        lsl     x0, x0, 16                  // r0 = S( 47, 16 )
 
         // print f(x)
-        adr     x0, quadvalIO
-        bl      printf
+        mov     x1, MAX_DECIMAL_DIGITS
+        bl      printS
 
         adr     x0, newline
         bl      printf
@@ -176,7 +189,7 @@ buildTable:
 
         cmp     x19, x20                    // oldlower = lower
         add     x19, x19, x29               // lower += increment value
-        //blt     buildTable                  // while( oldlower < upper )
+        blt     buildTable                  // while( oldlower < upper )
 
         // exit & add BONUS features
 
