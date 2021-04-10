@@ -68,11 +68,6 @@ main:   stp     x29, x30, [sp, -16]!
 
         mov     x19, x0                     // r19 = lowerL = S( 47, 16 )
 
-        // test
-        mov     x1, MAX_DECIMAL_DIGITS
-        bl      printS
-        // endtest
-
         adr     x0, newline
         bl      printf
 
@@ -90,11 +85,6 @@ main:   stp     x29, x30, [sp, -16]!
 
         mov     x20, x0                     // r20 = upperL = S( 47, 16 )
 
-        // test
-        mov     x1, MAX_DECIMAL_DIGITS
-        bl      printS
-        // endtest
-
         adr     x0, newline
         bl      printf
 
@@ -106,30 +96,45 @@ main:   stp     x29, x30, [sp, -16]!
         adr     x1, quadval
         bl      scanf
 
-        ldr     x29, quadval                // r29 = rows
+        ldr     x29, quadval
+        lsl     x29, x29, 16                // r29 = rows = S( 47, 16 )
 
         adr     x0, newline
         bl      printf
 
         // calculate increment value = ( upper - lower ) / rows
-        // * update increment value to handle non-integral value
-        sub     x29, x29, 1
-        sub     x0, x20, x19
+        mov     x0, 1
+        lsl     x0, x0, 16
+        sub     x29, x29, x0                // rows -= 1
+        sub     x0, x20, x19                // r0 = upper - lower
         udiv    x29, x0, x29                // r29 contains increment value
+        lsl     x29, x29, 16                // r29 = S( 47, 16 ) formatted for division operation
+
+
+        // ***** fix for no rounding
+        // *** test
+        mov     x0, x29
+        mov     x1, MAX_DECIMAL_DIGITS
+        bl      printS
+
+        // newline for output
+        adr     x0, newline
+        bl      printf
+        // *** endtest
+
 
         // print x and f(x) for table header
         adr     x0, tableHeader
         bl      printf
 
-        //// loop table construction
+        // loop table construction
         // loop over all values from lower to upper incrementing by the increment
         // value while outputting x and f(x) to fill the row at every iteration
-        //// end loop table construction
 buildTable:
         // print x
-        adr     x0, quadvalIO
-        mov     x1, x19
-        bl      printf
+        mov     x0, x19
+        mov     x1, MAX_DECIMAL_DIGITS
+        bl      printS
 
         // table column formatting
         adr     x0, tabchar
