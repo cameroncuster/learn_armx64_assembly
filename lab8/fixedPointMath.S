@@ -66,7 +66,7 @@ main:   stp     x29, x30, [sp, -16]!
         mov     x1, MAX_DECIMAL_DIGITS
         bl      strtoSfixed
 
-        mov     x19, x0                     // r19 = lowerL = S( 47, 16 )
+        mov     x19, x0                     // r19 = lowerL S( 47, 16 )
 
         adr     x0, newline
         bl      printf
@@ -83,7 +83,7 @@ main:   stp     x29, x30, [sp, -16]!
         mov     x1, MAX_DECIMAL_DIGITS
         bl      strtoSfixed
 
-        mov     x20, x0                     // r20 = upperL = S( 47, 16 )
+        mov     x20, x0                     // r20 = upperL S( 47, 16 )
 
         adr     x0, newline
         bl      printf
@@ -122,30 +122,30 @@ buildTable:
         adr     x0, tabchar
         bl      printf
 
-        // calculate f(x) * keep everything in fixed format S( 47, 16 )
+        // calculate f(x) * maintain all values in fixed format S( 47, 16 )
 
         // numerator
         mul     x1, x19, x19                // r1 = x^2
-        lsr     x1, x1, MAX_DECIMAL_DIGITS  // r1 = S( 47, 16 )
+        lsr     x1, x1, MAX_DECIMAL_DIGITS  // r1 S( 47, 16 )
         mul     x0, x19, x1                 // r0 = x^3
-        lsr     x0, x0, MAX_DECIMAL_DIGITS  // r0 = S( 47, 16 )
+        lsr     x0, x0, MAX_DECIMAL_DIGITS  // r0 S( 47, 16 )
         mov     x3, 2
-        lsl     x3, x3, 16                  // 2 in r3 = S( 47, 16 )
+        lsl     x3, x3, 16                  // 2 in r3 S( 47, 16 )
         mul     x2, x19, x3                 // r2 = 2x
-        lsr     x2, x2, MAX_DECIMAL_DIGITS  // r2 = S( 47, 16 )
+        lsr     x2, x2, MAX_DECIMAL_DIGITS  // r2 S( 47, 16 )
         sub     x0, x0, x1                  // r0 -= r1
         sub     x0, x0, x2                  // r0 -= r2
 
         // denominator
         sub     x1, x19, x3                 // r1 = ( x - 2 )
         mul     x1, x1, x1                  // r1 = r1^2
-        lsr     x1, x1, MAX_DECIMAL_DIGITS  // r1 = S( 47, 16 )
+        lsr     x1, x1, MAX_DECIMAL_DIGITS  // r1 S( 47, 16 )
         mul     x1, x1, x1                  // r1 = ( x - 2 )^4
-        lsr     x1, x1, MAX_DECIMAL_DIGITS  // r1 = S( 47, 16 )
+        lsr     x1, x1, MAX_DECIMAL_DIGITS  // r1 S( 47, 16 )
 
         // divide r1 by 11
         mov     x2, 11
-        sdiv    x1, x1, x2                  // r1 = S( 47, 16 )
+        sdiv    x1, x1, x2                  // r1 S( 47, 16 )
 
         // add 3 to r1
         mov     x2, 3
@@ -154,7 +154,7 @@ buildTable:
 
         // divide the numerator by the denominator
         sdiv    x0, x0, x1                  // r0 = r0 ( numerator ) / r1 ( denomonator )
-        lsl     x0, x0, 16                  // r0 = S( 47, 16 )
+        lsl     x0, x0, 16                  // r0 S( 47, 16 )
 
         // print f(x)
         mov     x1, MAX_DECIMAL_DIGITS
