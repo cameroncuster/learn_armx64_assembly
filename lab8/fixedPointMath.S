@@ -97,31 +97,13 @@ main:   stp     x29, x30, [sp, -16]!
         bl      scanf
 
         ldr     x29, quadval
-        lsl     x29, x29, 16                // r29 = rows = S( 47, 16 )
 
         adr     x0, newline
         bl      printf
 
         // calculate increment value = ( upper - lower ) / rows
-        mov     x0, 1
-        lsl     x0, x0, 16
-        sub     x29, x29, x0                // rows -= 1
         sub     x0, x20, x19                // r0 = upper - lower
-        udiv    x29, x0, x29                // r29 contains increment value
-        lsl     x29, x29, 16                // r29 = S( 47, 16 ) formatted for division operation
-
-
-        // ***** fix for no rounding
-        // *** test
-        mov     x0, x29
-        mov     x1, MAX_DECIMAL_DIGITS
-        bl      printS
-
-        // newline for output
-        adr     x0, newline
-        bl      printf
-        // *** endtest
-
+        udiv    x29, x0, x29                // r29 contains increment value S( 47, 16 )
 
         // print x and f(x) for table header
         adr     x0, tableHeader
@@ -147,7 +129,7 @@ buildTable:
         lsr     x1, x1, MAX_DECIMAL_DIGITS  // r1 = S( 47, 16 )
         mul     x0, x19, x1                 // r0 = x^3
         lsr     x0, x0, MAX_DECIMAL_DIGITS  // r0 = S( 47, 16 )
-        mov     x2, 2
+        mov     x3, 2
         lsl     x3, x3, 16                  // 2 in r3 = S( 47, 16 )
         mul     x2, x19, x3                 // r2 = 2x
         lsr     x2, x2, MAX_DECIMAL_DIGITS  // r2 = S( 47, 16 )
@@ -156,24 +138,22 @@ buildTable:
 
         // denominator
         sub     x1, x19, x3                 // r1 = ( x - 2 )
-        mul     x1, x1, x1
+        mul     x1, x1, x1                  // r1 = r1^2
         lsr     x1, x1, MAX_DECIMAL_DIGITS  // r1 = S( 47, 16 )
         mul     x1, x1, x1                  // r1 = ( x - 2 )^4
         lsr     x1, x1, MAX_DECIMAL_DIGITS  // r1 = S( 47, 16 )
 
         // divide r1 by 11
         mov     x2, 11
-        lsl     x2, x2, 16                  // 11 in r1 = S( 47, 16 )
-        sdiv    x1, x1, x2
-        lsl     x1, x1, 16                  // r1 = S( 47, 16 )
+        sdiv    x1, x1, x2                  // r1 = S( 47, 16 )
+
         // add 3 to r1
         mov     x2, 3
         lsl     x2, x2, 16
-        // use add     x1, x1, 3, lsl 16
         add     x1, x1, x2
 
         // divide the numerator by the denominator
-        sdiv    x0, x0, x1
+        sdiv    x0, x0, x1                  // r0 = r0 ( numerator ) / r1 ( denomonator )
         lsl     x0, x0, 16                  // r0 = S( 47, 16 )
 
         // print f(x)
@@ -190,8 +170,6 @@ buildTable:
         cmp     x19, x20                    // oldlower = lower
         add     x19, x19, x29               // lower += increment value
         blt     buildTable                  // while( oldlower < upper )
-
-        // exit & add BONUS features
 
         ldp     x19, x20, [sp], 16
         stp     x21, x22, [sp], 16
