@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#define MAX_DECIMAL_DIGITS 8
+#define MAX_DECIMAL_DIGITS 16
 /* Multiply an unpacked BCD number by 2. Return 1 if there is a
    carry out of the most signignificant digit. 0 otherwise. The
    resulting number is returned in n1.

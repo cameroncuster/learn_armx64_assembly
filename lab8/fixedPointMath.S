@@ -1,10 +1,11 @@
+        .set    MAX_DECIMAL_DIGITS, 16
+
         .bss
-lower:  .quad   0
+quadval:.quad   0
         .align  3
-upper:  .quad   0
-        .align  3
-rows:   .quad   0
-        .align  3
+strin:  .byte   0
+        .skip   64
+        .align  0
 
         .section .rodata
 description:
@@ -29,7 +30,7 @@ tableHeader:
 string: .asciz  "%s"
         .align  2
 
-quadval:
+quadvalIO:
         .asciz  "%ld"
         .align  2
 
@@ -46,30 +47,53 @@ newline:.asciz  "\n"
         .type   main, %function
         .globl  main
 main:   stp     x29, x30, [sp, -16]!
+        stp     x21, x22, [sp, -16]!
         stp     x19, x20, [sp, -16]!
 
         // brief description
         adr     x0, description
         bl      printf
 
-        // get lower limit * update for non-integral values
+        // get lower limit
         adr     x0, getLowerLimit
         bl      printf
 
-        adr     x0, quadval                 // read a string but where is it stored
-        adr     x1, lower
+        adr     x0, string
+        adr     x1, strin
         bl      scanf
+
+        adr     x0, strin
+        mov     x1, MAX_DECIMAL_DIGITS
+        bl      strtoSfixed
+
+        mov     x19, x0                     // r19 = lowerL = S( 47, 16 )
+
+        // test
+        mov     x1, MAX_DECIMAL_DIGITS
+        bl      printS
+        // endtest
 
         adr     x0, newline
         bl      printf
 
-        // get upper limit * update for non-integral values
+        // get upper limit
         adr     x0, getUpperLimit
         bl      printf
 
-        adr     x0, quadval
-        adr     x1, upper
+        adr     x0, string
+        adr     x1, strin
         bl      scanf
+
+        adr     x0, strin
+        mov     x1, MAX_DECIMAL_DIGITS
+        bl      strtoSfixed
+
+        mov     x20, x0                     // r20 = upperL = S( 47, 16 )
+
+        // test
+        mov     x1, MAX_DECIMAL_DIGITS
+        bl      printS
+        // endtest
 
         adr     x0, newline
         bl      printf
@@ -78,18 +102,17 @@ main:   stp     x29, x30, [sp, -16]!
         adr     x0, getRows
         bl      printf
 
-        adr     x0, quadval
-        adr     x1, rows
+        adr     x0, quadvalIO
+        adr     x1, quadval
         bl      scanf
+
+        ldr     x29, quadval                // r29 = rows
 
         adr     x0, newline
         bl      printf
 
         // calculate increment value = ( upper - lower ) / rows
         // * update increment value to handle non-integral value
-        ldr     x19, lower                  // r19 = lower
-        ldr     x20, upper                  // r20 = upper
-        ldr     x29, rows
         sub     x29, x29, 1
         sub     x0, x20, x19
         udiv    x29, x0, x29                // r29 contains increment value
@@ -104,7 +127,7 @@ main:   stp     x29, x30, [sp, -16]!
         //// end loop table construction
 buildTable:
         // print x
-        adr     x0, quadval
+        adr     x0, quadvalIO
         mov     x1, x19
         bl      printf
 
@@ -136,7 +159,7 @@ buildTable:
         sdiv    x1, x0, x1
 
         // print f(x)
-        adr     x0, quadval
+        adr     x0, quadvalIO
         bl      printf
 
         adr     x0, newline
@@ -148,11 +171,12 @@ buildTable:
 
         cmp     x19, x20                    // oldlower = lower
         add     x19, x19, x29               // lower += increment value
-        blt     buildTable                  // while( oldlower < upper )
+        //blt     buildTable                  // while( oldlower < upper )
 
         // exit & add BONUS features
 
         ldp     x19, x20, [sp], 16
+        stp     x21, x22, [sp], 16
         ldp     x29, x30, [sp], 16
         mov     x0, 0
         ret
