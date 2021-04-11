@@ -23,7 +23,7 @@ tableHeader:
         .align  2
 
 fmt:    .asciz  "%f"
-        .align  3
+        .align  2
 
 tabchar:.asciz  "\t"
         .align  2
@@ -38,7 +38,7 @@ newline:.asciz  "\n"
         .type   main, %function
         .globl  main
 main:   stp     x29, x30, [sp, -16]!
-        stp     d10, d11, [sp, -16]!        // 32 bytes off the stack for v register?
+        stp     d10, d11, [sp, -16]!
         stp     d8, d9, [sp, -16]!
 
         // brief description
@@ -53,7 +53,7 @@ main:   stp     x29, x30, [sp, -16]!
         adr     x1, quadval
         bl      scanf
 
-        ldr     d8, quadval                // store the value in a double precision floating point register
+        ldr     d8, quadval
 
         adr     x0, newline
         bl      printf
@@ -66,7 +66,7 @@ main:   stp     x29, x30, [sp, -16]!
         adr     x1, quadval
         bl      scanf
 
-        ldr     d9, quadval                // store the value in a double precision floating point vector register
+        ldr     d9, quadval
 
         adr     x0, newline
         bl      printf
@@ -79,7 +79,7 @@ main:   stp     x29, x30, [sp, -16]!
         adr     x1, quadval
         bl      scanf
 
-        ldr     d10, quadval                // store to floating point precision
+        ldr     d10, quadval
 
         adr     x0, newline
         bl      printf
@@ -98,7 +98,7 @@ main:   stp     x29, x30, [sp, -16]!
 buildTable:
         // print x
         adr     x0, fmt
-        fmov    d1, d8                      // use d1 for floating point argument
+        fmov    d1, d8                      // use f1 for floating point arg
         bl      printf
 
         // table column formatting
@@ -115,7 +115,7 @@ buildTable:
 
         // print f(x) * currently x for skeleton code
         adr     x0, fmt
-        fmov    d1, d8                      // use d1 for floating point argument
+        fmov    d1, d8                      // use f1 for floating point arg
         bl      printf
 
         adr     x0, newline
