@@ -55,8 +55,18 @@ main:   stp     x29, x30, [sp, -16]!
 
         ldr     d8, quadval
 
+        //// *** DEBUG *** ////
         adr     x0, newline
         bl      printf
+
+        adr     x0, fmt
+        fmov    d1, d8                      // use x or d register for printf floating point arguements?
+        bl      printf
+        //// *** END DEBUG *** ////
+
+        adr     x0, newline
+        bl      printf
+
 
         // get upper limit
         adr     x0, getUpperLimit
@@ -68,8 +78,18 @@ main:   stp     x29, x30, [sp, -16]!
 
         ldr     d9, quadval
 
+        //// *** DEBUG *** ////
         adr     x0, newline
         bl      printf
+
+        adr     x0, fmt
+        fmov    d1, d9
+        bl      printf
+        //// *** END DEBUG *** ////
+
+        adr     x0, newline
+        bl      printf
+
 
         // get rows
         adr     x0, getRows
@@ -81,8 +101,18 @@ main:   stp     x29, x30, [sp, -16]!
 
         ldr     d10, quadval
 
+        //// *** DEBUG *** ////
         adr     x0, newline
         bl      printf
+
+        adr     x0, fmt
+        fmov    d1, d10
+        bl      printf
+        //// *** END DEBUG *** ////
+
+        adr     x0, newline
+        bl      printf
+
 
         // calculate increment value = ( upper - lower ) / rows
         fsub    d0, d9, d8                  // f0 = upper - lower
