@@ -22,7 +22,7 @@ tableHeader:
         .asciz  "x\tf(x)\n"
         .align  2
 
-fmt:    .asciz  "%f"
+fmt:    .asciz  "%lf"
         .align  2
 
 tabchar:.asciz  "\t"
@@ -73,7 +73,7 @@ main:   stp     x29, x30, [sp, -16]!
         bl      printf
 
         adr     x0, fmt
-        adr     x1, doubleval
+        adr     d1, doubleval
         bl      scanf
 
         ldr     d9, doubleval
