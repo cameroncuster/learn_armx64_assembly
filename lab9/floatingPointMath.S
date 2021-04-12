@@ -80,8 +80,11 @@ main:   stp     x29, x30, [sp, -16]!
         bl      scanf
 
         ldr     d10, doubleval
+
         fmov    d0, 1.0
         fsub    d10, d10, d0                // rows--
+
+        frintm  d10, d10                    // round down
 
         adr     x0, newline
         bl      printf
@@ -118,9 +121,8 @@ buildTable:
         // denominator
         fmov    d1, 2.0
         fsub    d1, d8, d1                  // f1 = x - 2
-        // logical shift left for floating point?
         fmul    d1, d1, d1
-        fmul    d1, d1, d1                  // f1 = ( x - 2 )^4
+        fmul    d1, d1, d1                  // f1 = ( x - 2 )^4 * faster to multiply out... ?
         fmov    d2, 11.0
         fdiv    d1, d1, d2                  // f1 = ( x - 2 )^4 / 11
         fmov    d2, 3.0
