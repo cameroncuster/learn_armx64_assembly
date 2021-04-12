@@ -55,18 +55,8 @@ main:   stp     x29, x30, [sp, -16]!
 
         ldr     d8, doubleval
 
-        //// *** DEBUG *** ////
         adr     x0, newline
         bl      printf
-
-        adr     x0, fmt
-        fmov    d0, d8                      // use x or d register for printf floating point arguements?
-        bl      printf
-        //// *** END DEBUG *** ////
-
-        adr     x0, newline
-        bl      printf
-
 
         // get upper limit
         adr     x0, getUpperLimit
@@ -78,18 +68,8 @@ main:   stp     x29, x30, [sp, -16]!
 
         ldr     d9, doubleval
 
-        //// *** DEBUG *** ////
         adr     x0, newline
         bl      printf
-
-        adr     x0, fmt
-        fmov    d0, d9
-        bl      printf
-        //// *** END DEBUG *** ////
-
-        adr     x0, newline
-        bl      printf
-
 
         // get rows
         adr     x0, getRows
@@ -100,19 +80,11 @@ main:   stp     x29, x30, [sp, -16]!
         bl      scanf
 
         ldr     d10, doubleval
-
-        //// *** DEBUG *** ////
-        adr     x0, newline
-        bl      printf
-
-        adr     x0, fmt
-        fmov    d0, d10
-        bl      printf
-        //// *** END DEBUG *** ////
+        fmov    d0, 1.0
+        fsub    d10, d10, d0                // rows--
 
         adr     x0, newline
         bl      printf
-
 
         // calculate increment value = ( upper - lower ) / rows
         fsub    d0, d9, d8                  // f0 = upper - lower
@@ -128,7 +100,7 @@ main:   stp     x29, x30, [sp, -16]!
 buildTable:
         // print x
         adr     x0, fmt
-        fmov    d1, d8                      // use f1 for floating point arg
+        fmov    d0, d8
         bl      printf
 
         // table column formatting
@@ -138,14 +110,25 @@ buildTable:
         // calculate f(x)
 
         // numerator
+        fmul    d0, d8, d8                  // f0 = x^2
+        fnmsub  d0, d0, d8, d0              // f0 = - ( x^2 - x^3 ) = x^3 - x^2
+        fmov    d1, 2.0                     // f1 = 2
+        fmsub   d0, d8, d1, d0              // f0 = ( x^3 - x^2 ) - 2x
 
         // denominator
+        fmov    d1, 2.0
+        fsub    d1, d8, d1                  // f1 = x - 2
+        // logical shift left for floating point?
+        fmul    d1, d1, d1
+        fmul    d1, d1, d1                  // f1 = ( x - 2 )^4
+        fmov    d2, 11.0
+        fdiv    d1, d1, d2                  // f1 = ( x - 2 )^4 / 11
+        fmov    d2, 3.0
+        fadd    d1, d1, d2                  // f1 = ( x - 2 )^4 / 11 + 3
 
         // divide the numerator by the denominator
-
-        // print f(x) * currently x for skeleton code
         adr     x0, fmt
-        fmov    d1, d8                      // use f1 for floating point arg
+        fdiv    d0, d0, d1
         bl      printf
 
         adr     x0, newline
