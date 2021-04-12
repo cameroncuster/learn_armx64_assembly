@@ -1,5 +1,6 @@
-        .bss
-quadval:.quad   0
+        .data
+doubleval:
+        .double 0
         .align  3
 
         .section .rodata
@@ -17,7 +18,6 @@ getUpperLimit:
 
 getRows:.asciz  "Rows: "
         .align  2
-
 tableHeader:
         .asciz  "x\tf(x)\n"
         .align  2
@@ -50,10 +50,10 @@ main:   stp     x29, x30, [sp, -16]!
         bl      printf
 
         adr     x0, fmt
-        adr     x1, quadval
+        adr     x1, doubleval
         bl      scanf
 
-        ldr     d8, quadval
+        ldr     d8, doubleval
 
         //// *** DEBUG *** ////
         adr     x0, newline
@@ -73,10 +73,10 @@ main:   stp     x29, x30, [sp, -16]!
         bl      printf
 
         adr     x0, fmt
-        adr     x1, quadval
+        adr     x1, doubleval
         bl      scanf
 
-        ldr     d9, quadval
+        ldr     d9, doubleval
 
         //// *** DEBUG *** ////
         adr     x0, newline
@@ -96,10 +96,10 @@ main:   stp     x29, x30, [sp, -16]!
         bl      printf
 
         adr     x0, fmt
-        adr     x1, quadval
+        adr     x1, doubleval
         bl      scanf
 
-        ldr     d10, quadval
+        ldr     d10, doubleval
 
         //// *** DEBUG *** ////
         adr     x0, newline
