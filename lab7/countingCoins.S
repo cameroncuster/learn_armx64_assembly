@@ -20,22 +20,13 @@ week:   .asciz  "%d: " // combine with above printf
 collected: .asciz "Over four weeks you have collected %d pennies, %d nickels, %d dimes, and %d quarters \n\n"
         .align  2
 
-total:  .asciz  "This comes to $%d.%d \n"
+total:  .asciz  "This comes to $%d.%02d \n"
         .align  2
 
-totalRemainderLessthan10:.asciz "This comes to $%d.0%d \n"
+average:.asciz  "Your weekly average is $%d.%02d \n"
         .align  2
 
-average:.asciz  "Your weekly average is $%d.%d \n"
-        .align  2
-
-averageRemainderLessthan10:.asciz "Your weekly average is $%d.0%d \n"
-        .align  2
-
-savings:.asciz  "Your estimated yearly savings is $%d.%d \n"
-        .align  2
-
-savingsRemainderLessthan10:.asciz "Your estimated yearly savings is $%d.0%d \n"
+savings:.asciz  "Your estimated yearly savings is $%d.%02d \n"
         .align  2
 
 valuesin:.asciz "%d %d %d %d"
@@ -110,7 +101,8 @@ read_weeks:
         mov     w4, w24
         bl      printf
 
-        // calculate total
+
+// calculate total
 
         // r19 = 0
         add     w0, w22, w22, lsl 2
@@ -137,20 +129,12 @@ read_weeks:
         mul     x2, x2, x1
         sub     x2, x19, x2
 
-        // check for cents > 9
-        cmp     x2, 9
-        bgt     totalRemainderGreaterthan9
-
-        adr     x0, totalRemainderLessthan10
-        bl      printf                      // print the total
-
-        b       calculateAverage
-
-totalRemainderGreaterthan9:
         adr     x0, total
         bl      printf                      // print the total
 
-calculateAverage:
+
+// calculate average
+
         // divide total by 400 for average amount in USD
         // calculate quotient in r1
         ldr     x2, =0x28F6
@@ -165,20 +149,12 @@ calculateAverage:
 
         lsr     x2, x2, 2                   // remainder /= 4 * to account for average
 
-        // check for cents > 9
-        cmp     x2, 9
-        bgt     averageRemainderGreaterthan9
-
-        adr     x0, averageRemainderLessthan10
-        bl      printf                      // print the average
-
-        b       calculateSavings
-
-averageRemainderGreaterthan9:
         adr     x0, average
         bl      printf                      // print the average
 
-calculateSavings:
+
+// calculate savings
+
         lsl     w0, w19, 3
         add     w19, w0, w19, lsl 2
 
@@ -194,20 +170,12 @@ calculateSavings:
         mul     x2, x2, x1
         sub     x2, x19, x2
 
-        // check for cents > 9
-        cmp     x2, 9
-        bgt     savingsRemainderGreaterthan9
-
-        adr     x0, savingsRemainderLessthan10
-        bl      printf                      // print the savings
-
-        b       exit
-
-savingsRemainderGreaterthan9:
         adr     x0, savings
         bl      printf                      // print the savings
 
-exit:
+
+// exit
+
         ldp     x23, x24, [sp], 16
         ldp     x21, x22, [sp], 16
         ldp     x19, x20, [sp], 16
