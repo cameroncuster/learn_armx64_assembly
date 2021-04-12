@@ -60,7 +60,7 @@ main:   stp     x29, x30, [sp, -16]!
         bl      printf
 
         adr     x0, fmt
-        fmov    d1, d8                      // use x or d register for printf floating point arguements?
+        fmov    d0, d8                      // use x or d register for printf floating point arguements?
         bl      printf
         //// *** END DEBUG *** ////
 
@@ -73,7 +73,7 @@ main:   stp     x29, x30, [sp, -16]!
         bl      printf
 
         adr     x0, fmt
-        adr     d1, doubleval
+        adr     x1, doubleval
         bl      scanf
 
         ldr     d9, doubleval
@@ -83,7 +83,7 @@ main:   stp     x29, x30, [sp, -16]!
         bl      printf
 
         adr     x0, fmt
-        fmov    d1, d9
+        fmov    d0, d9
         bl      printf
         //// *** END DEBUG *** ////
 
@@ -106,7 +106,7 @@ main:   stp     x29, x30, [sp, -16]!
         bl      printf
 
         adr     x0, fmt
-        fmov    d1, d10
+        fmov    d0, d10
         bl      printf
         //// *** END DEBUG *** ////
 
