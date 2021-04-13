@@ -42,17 +42,17 @@ loopi:  mov     w6, 0                       // j = 0
         ldr     x7, [x4, x5, lsl 3]         // load the gray pixel array
         ldr     x8, [x3, x5, lsl 3]         // load the rgb pixel array
 loopj:
-        ld3     {v0.8h-v2.8h}, [x8], 48     // load 8|16 copies r - v0, g - v1, b - v2
-
-        /* shift by 8, invalid */
-        // use shll and shll2
-        // shrn - shift right narrow
-
         // check if more than 8 pixels remain in the row
             // if not compute the rest manually
         sub     w9, w1, w6
         cmp     w9, 8
         blt     single_pixel_loopj
+
+        ld3     {v0.8h-v2.8h}, [x8], 48     // load 8|16 copies r - v0, g - v1, b - v2
+
+        /* shift by 8, invalid */
+        // use shll and shll2
+        // shrn - shift right narrow
 
         // calculate the gray pixel values based on the rgb pixel values
         shl     v3.8h, v0.8h, 6
