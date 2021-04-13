@@ -72,3 +72,4 @@ loopj:
 		ldp		x19, x30, [sp], #16
 		// x0 contains the gray image to return
 		ret
+        .size   color_to_gray, (. - color_to_gray)
