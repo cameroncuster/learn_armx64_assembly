@@ -48,6 +48,12 @@ loopj:
         // use shll and shll2
         // shrn - shift right narrow
 
+        // check if more than 8 pixels remain in the row
+            // if not compute the rest manually
+        sub     w9, w1, w6
+        cmp     w9, 8
+        ble     single_pixel_loopj
+
         // calculate the gray pixel values based on the rgb pixel values
         shl     v3.8h, v0.8h, 6
         shl     v4.8h, v0.8h, 3
@@ -75,11 +81,33 @@ loopj:
         // store the gray pixel value
         st3     {v0.8h-v2.8h}, [x8], 48
 
+        // while j < width
+        add     w6, w6, 8
+        cmp     w6, w1
+        blt     loopj
+
+single_pixel_loopj:
+        ldrb    w11, [x8], 1                // load the rgb pixel red
+        ldrb    w12, [x8], 1                // load the rgb pixel green
+        ldrb    w13, [x8], 1                // load the rgb pixel blue
+
+        // calculate the gray pixel values based on the rgb pixel values
+        mov     x14, 54
+        mul     x11, x11, x14               // 54r
+        mov     x14, 184
+        madd    x11, x14, x12, x11          // 54r + 184g
+        mov     x14, 18
+        madd    x11, x14, x13, x11          // 54r + 184g + 18b
+
+        lsr     w11, w11, 8                 // divide the result by 256
+
+        strb    w11, [x7, x6]               // store gray pixel value
 
         // while j < width
         add     w6, w6, 1
         cmp     w6, w1
-        blt     loopj
+        blt     single_pixel_loopj
+
 
         // while i < height
         add     w5, w5, 1
