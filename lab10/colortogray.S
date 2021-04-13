@@ -76,10 +76,10 @@ loopj:
         add     v3.8h, v0.8h, v1.8h
         add     v0.8h, v3.8h, v2.8h         // 54r + 184g + 18b
 
-        ushr    v0.8h, v0.8h, 8             // ( 54r + 184g + 18b ) / 256
+        shrn    v0.8b, v0.8h, 8             // narrow to store in byte size blocks of mem
 
         // store the gray pixel value
-        st3     {v0.8h-v2.8h}, [x7], 48     // offset by 48? // store values that fit 8 bytes
+        st1     {v0.8b}, [x7], 8
 
         // while j < width
         add     w6, w6, 8
