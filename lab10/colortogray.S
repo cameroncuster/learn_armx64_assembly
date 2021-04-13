@@ -37,8 +37,8 @@ color_to_gray:
         ldr     w1, [x19, width]            // get width
         ldr     w2, [x19, height]           // get height
 
-        mov     x5, 0                       // i = 0
-loopi:  mov     x6, 0                       // j = 0
+        mov     w5, 0                       // i = 0
+loopi:  mov     w6, 0                       // j = 0
         ldr     x7, [x4, x5, lsl 3]         // load the gray pixel array
         ldr     x8, [x3, x5, lsl 3]         // load the rgb pixel array
 loopj:
