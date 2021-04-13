@@ -52,7 +52,7 @@ loopj:
             // if not compute the rest manually
         sub     w9, w1, w6
         cmp     w9, 8
-        ble     single_pixel_loopj
+        blt     single_pixel_loopj
 
         // calculate the gray pixel values based on the rgb pixel values
         shl     v3.8h, v0.8h, 6
@@ -79,7 +79,7 @@ loopj:
         ushr    v0.8h, v0.8h, 8             // ( 54r + 184g + 18b ) / 256
 
         // store the gray pixel value
-        st3     {v0.8h-v2.8h}, [x8], 48
+        st3     {v0.8h-v2.8h}, [x7], 48     // offset by 48? // store values that fit 8 bytes
 
         // while j < width
         add     w6, w6, 8
