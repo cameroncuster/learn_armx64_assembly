@@ -35,6 +35,10 @@ color_to_gray:
         ldr     w1, [x19, width]            // get width
         ldr     w2, [x19, height]           // get height
 
+        movi    v4.8h, 54
+        movi    v5.8h, 184
+        movi    v6.8h, 18
+
         mov     w5, 0                       // i = 0
 loopi:  mov     w6, 0                       // j = 0
         ldr     x7, [x4, x5, lsl 3]         // load the gray pixel array
@@ -56,14 +60,11 @@ loopj:
         uxtl    v2.8h, v2.8b
 
         // calculate the gray pixel values based on the rgb pixel values
-        movi    v3.8h, 54
-        mul     v0.8h, v0.8h, v3.8h         // 54r
+        mul     v0.8h, v0.8h, v4.8h         // 54r
 
-        movi    v3.8h, 184
-        mul     v1.8h, v1.8h, v3.8h         // 184g
+        mul     v1.8h, v1.8h, v5.8h         // 184g
 
-        movi    v3.8h, 18
-        mul     v2.8h, v2.8h, v3.8h         // 18b
+        mul     v2.8h, v2.8h, v6.8h         // 18b
 
         add     v3.8h, v0.8h, v1.8h
         add     v0.8h, v3.8h, v2.8h         // 54r + 184g + 18b
