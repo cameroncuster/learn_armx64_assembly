@@ -1,7 +1,5 @@
 /* color_to_gray will allocate a new grayimage structure and fill it
-   with the grayscale equivalent of the given image.
-
-   The C prototype is:
+   with the grayscale equivalent of the given image.  The C prototype is:
 
    grayimage *color_to_gray(rgbimage *image);
 
@@ -53,29 +51,19 @@ loopj:
         /* shift by 8, invalid */
         // use shll and shll2
         // shrn - shift right narrow
-
         uxtl    v0.8h, v0.8b                //  extend long
         uxtl    v1.8h, v1.8b
         uxtl    v2.8h, v2.8b
 
         // calculate the gray pixel values based on the rgb pixel values
-        shl     v3.8h, v0.8h, 6
-        shl     v4.8h, v0.8h, 3
-        shl     v5.8h, v0.8h, 1
-        sub     v3.8h, v3.8h, v4.8h
-        sub     v0.8h, v3.8h, v5.8h         // 54r
+        movi    v3.8h, 54
+        mul     v0.8h, v0.8h, v3.8h         // 54r
 
-        shl     v3.8h, v1.8h, 7
-        shl     v3.8h, v1.8h, 1
+        movi    v3.8h, 184
+        mul     v1.8h, v1.8h, v3.8h         // 184g
 
-        shl     v4.8h, v1.8h, 6
-        shl     v5.8h, v1.8h, 3
-        sub     v3.8h, v3.8h, v4.8h
-        sub     v1.8h, v3.8h, v5.8h         // 184g
-
-        shl     v3.8h, v2.8h, 4
-        shl     v4.8h, v2.8h, 1
-        add     v2.8h, v3.8h, v4.8h         // 18b
+        movi    v3.8h, 18
+        mul     v2.8h, v2.8h, v3.8h         // 18b
 
         add     v3.8h, v0.8h, v1.8h
         add     v0.8h, v3.8h, v2.8h         // 54r + 184g + 18b
