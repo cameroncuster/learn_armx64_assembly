@@ -122,7 +122,7 @@ buildTable:
         adr     x0, tabchar
         bl      printf
 
-        // calculate f(x) * maintain all values in fixed format S( 47, 16 )
+        // calculate f(x) and maintain all values in fixed format S( 47, 16 )
 
         // numerator
         mul     x1, x19, x19                // r1 = x^2
@@ -153,8 +153,8 @@ buildTable:
         add     x1, x1, x2
 
         // divide the numerator by the denominator
-        sdiv    x0, x0, x1                  // r0 = r0 ( numerator ) / r1 ( denomonator )
-        lsl     x0, x0, 16                  // r0 S( 47, 16 )
+        lsl     x0, x0, 16                  // shift numerator left for more fractional precision S( 31, 32 )
+        sdiv    x0, x0, x1                  // r0 = r0 ( numerator ) / r1 ( denomonator ) -> S( 47, 16 )
 
         // print f(x)
         mov     x1, MAX_DECIMAL_DIGITS
