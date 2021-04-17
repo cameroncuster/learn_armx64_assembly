@@ -102,6 +102,7 @@ main:   stp     x29, x30, [sp, -16]!
         bl      printf
 
         // calculate increment value = ( upper - lower ) / rows
+        sub     x29, x29, 1                 // rows--
         sub     x0, x20, x19                // r0 = upper - lower
         udiv    x29, x0, x29                // r29 contains increment value S( 47, 16 )
 
@@ -112,7 +113,7 @@ main:   stp     x29, x30, [sp, -16]!
         // loop table construction
         // loop over all values from lower to upper incrementing by the increment
         // value while outputting x and f(x) to fill the row at every iteration
-buildTable:
+buildTable: // move constants out of loop
         // print x
         mov     x0, x19
         mov     x1, MAX_DECIMAL_DIGITS
@@ -167,9 +168,9 @@ buildTable:
         adr     x0, newline
         bl      printf
 
-        cmp     x19, x20                    // oldlower = lower
         add     x19, x19, x29               // lower += increment value
-        blt     buildTable                  // while( oldlower < upper )
+        cmp     x19, x20
+        blt     buildTable                  // while( lower < upper )
 
         ldp     x19, x20, [sp], 16
         stp     x21, x22, [sp], 16
