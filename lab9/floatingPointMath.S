@@ -82,7 +82,7 @@ main:   stp     x29, x30, [sp, -16]!
         ldr     d10, doubleval
 
         fmov    d0, 1.0
-        fsub    d10, d10, d0                // rows--
+        //fsub    d10, d10, d0                // rows--
 
         frintm  d10, d10                    // round down
 
@@ -140,8 +140,8 @@ buildTable:
         adr     x0, newline
         bl      printf
 
-        fcmp    d8, d9                      // oldlower = lower
         fadd    d8, d8, d11                 // increment lower
+        fcmp    d8, d9
         blt     buildTable                  // while( lower < upper )
 
         ldp     d8, d9, [sp], 16
