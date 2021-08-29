@@ -1,14 +1,29 @@
-C_OBJECTS = makegray.o  netpbm.o
-ASM_OBJECTS = colortogray.o freeImage.o
 
-makegray: $(C_OBJECTS) $(ASM_OBJECTS)
-	gcc -g -o makegray $(C_OBJECTS) $(ASM_OBJECTS)
+CPP_OBJS=main.o queue.o
+ASM_OBJS=queue_asm.S
 
-.c.o:
-	gcc -Wall -O3 -I. -g -c $<
+ASM_SRC= $(patsubst %.o,%.S,$(ASM_OBJS))
+C_SRC= $(patsubst %.o,%.cc,$(CPP_OBJS))
 
-.S.o:
-	gcc -Wall -O3 -I. -g -c $<
+
+# The following line allows you to add link-time flags
+LFLAGS=-Wall -O3 -g
+
+# The following line allows you to add compiler flags for C++ code
+CPPFLAGS=-Wall -O3 -g -I.
+
+# The following line allows you to add compiler flags for assembly code
+ASMFLAGS=-Wall -O3 -g -I.
+
+queuetest: ${CPP_OBJS} ${ASM_OBJS}
+	g++ ${LFLAGS} -o queuetest ${CPP_OBJS} ${ASM_OBJS}
+
+%.o: %.cc
+	g++ ${CPPFLAGS} -c $<
+
+%.o: %.S
+	gcc ${ASMFLAGS} -c $<
+
 
 clean:
-	rm -f *.o makegray *~ *.pgm
+	rm -f queuetest *.o *~
